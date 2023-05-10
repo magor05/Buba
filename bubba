@@ -1,1 +1,90 @@
 
+
+
+COMANDO CREATE /*
+
+LINGUAGGIO SQL (STRUCTURED QUERY LANGUAGE)
+
+COMANDO CREATE 
+
+
+*/
+-- CREAZIONE DELLA TABELLA MOSTRE 
+CREATE TABLE MOSTRE
+(
+  ID         VARCHAR(5)     NOT NULL,
+  Titolo     VARCHAR(40)    NOT NULL,
+  Tariffa    NUMBER(6,2)    NOT NULL DEFAULT 0.00,  
+  Temporanea BOOL           NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (ID)
+);
+
+CREATE TABLE PASS
+(
+  Codice         VARCHAR(5)  NOT NULL,
+  Colore         VARCHAR(10),
+  Data_Scadenza  DATE        NOT NULL,
+  PRIMARY KEY (Codice)
+);
+
+CREATE TABLE RIDUZIONI
+(
+  Codice      VARCHAR(5)  NOT NULL,
+  Descrizione VARCHAR(30) NOT NULL,
+  Perc_Sconto INT         NOT NULL,
+  PRIMARY KEY (Codice)
+);
+
+CREATE TABLE VISITATORE
+(
+  ID             VARCHAR(5) NOT NULL,
+  Nome           VARCHAR(30) NOT NULL,
+  Cognome        VARCHAR(30) NOT NULL,
+  Email          VARCHAR(30),
+  Telefono       VARCHAR(30), 
+  Codice_Pass    VARCHAR(5) NOT NULL,
+  PRIMARY KEY (ID),
+  FOREIGN KEY (Codice_Pass) REFERENCES PASS(Codice)
+);
+
+CREATE TABLE BIGLIETTO
+(
+  ID VARCHAR(5) NOT NULL,
+  Tipo VARCHAR(10) NOT NULL,
+  Prezzo_Tot NUMERIC(6,2) NOT NULL,
+  Data_Acquisto DATE NOT NULL,
+  ID_Visitatore VARCHAR(5) NOT NULL,
+  PRIMARY KEY (ID),
+  FOREIGN KEY (ID_Visitatore) REFERENCES VISITATORE(ID)
+);
+
+CREATE TABLE INTERO
+(
+  Audioguida BOOL NOT NULL,
+  Libretto BOOL NOT NULL,
+  ID_Biglietto VARCHAR(5) NOT NULL,
+  PRIMARY KEY (ID_Biglietto),
+  FOREIGN KEY (ID_Biglietto) REFERENCES BIGLIETTO(ID)
+);
+
+CREATE TABLE RIDOTTO
+(
+  Totale_Sconto NUMERIC(6,2) NOT NULL,
+  ID_Biglietto VARCHAR(5) NOT NULL,
+  Codice_Riduzione VARCHAR(5) NOT NULL,
+  PRIMARY KEY (ID_Biglietto),
+  FOREIGN KEY (ID_Biglietto) REFERENCES BIGLIETTO(ID),
+  FOREIGN KEY (Codice_Riduzione) REFERENCES RIDUZIONE(Codice)
+);
+
+CREATE TABLE Accesso
+(
+  Data DATE NOT NULL,
+  Codice VARCHAR(5) NOT NULL,
+  ID_Mostra VARCHAR(5) NOT NULL,
+  ID_Biglietto VARCHAR(5) NOT NULL,
+  PRIMARY KEY (Codice),
+  FOREIGN KEY (ID_Mostra) REFERENCES MOSTRA(ID),
+  FOREIGN KEY (ID_Biglietto) REFERENCES BIGLIETTO(ID)
+);
+
